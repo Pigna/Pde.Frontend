@@ -38,6 +38,7 @@ function FetchTablesAndRelations() {
                 // setPort("");
                 // setDatabase("");
                 setTables(resJson.databaseInfo.tables);
+                setRelations(resJson.databaseInfo.relations);
                 setMessage("Login Successfully. " + resJson.result);
             } else {
                 setTables([])
@@ -47,7 +48,11 @@ function FetchTablesAndRelations() {
             console.log("Backend connection error:" + err);
         }
     };
-    
+
+    function getRelationsForTable(tableName) {
+        return relations.filter(item => item.parentTable === tableName || item.childTable === tableName);
+    }
+
     return (
         <div className="fetch-tables">
             <form onSubmit={handleSubmit}>
@@ -87,7 +92,8 @@ function FetchTablesAndRelations() {
             {tables.map((item => {
                     return <Table key={item.name}
                                   id={item.name}
-                                  columns={item.columns}/>;
+                                  columns={item.columns}
+                                  relations={getRelationsForTable(item.name)}/>;
                 }
             ))}
             {relations.map((item => <Relation key={item.connectionName}
