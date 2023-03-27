@@ -47,13 +47,15 @@
 .column:last-child {
   border-bottom: none;
 }
-.column:hover{
+.column:hover {
   background-color: var(--green-hover);
 }
 .column td {
   padding: 4px 7px;
 }
-
-.key {
-  color: yellow
+.key-primary {
+  color: #ffe037;
+}
+.key-foreign {
+  color: #a4a4a4;
 }
