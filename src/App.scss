@@ -1,0 +1,59 @@
+:root {
+  --blue: #6787C7;
+  --yellow: #D9E44E;
+  --green: #B3DA86;
+  --green-hover: #C3D9ADFF;
+  --red: #F56957;
+  --purple: #A576B5;
+  --turquois: #75CDDD;
+}
+
+.App {
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 5vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.FetchTables {
+  background-color: blue;
+}
+.table {
+  background-color: var(--green);
+  display: inline-grid;
+  width: auto;
+  margin: 1em;
+}
+.table .table-name {
+  border-bottom: 2px solid black;
+  padding: 7px;
+}
+
+.table .table-columns {
+  display: inline-block;
+}
+
+
+.column {
+  border-bottom: 1px solid white;
+}
+.column:last-child {
+  border-bottom: none;
+}
+.column:hover{
+  background-color: var(--green-hover);
+}
+.column td {
+  padding: 4px 7px;
+}
+
+.key {
+  color: yellow
+}
