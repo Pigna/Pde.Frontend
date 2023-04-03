@@ -1,11 +1,12 @@
-function Relation({childTable, childColumn, parentTable, parentColumn, connectionName}) {
+function Relation({foreignKeyTable, foreignKeyColumn, foreignKeyConstraintName, primaryKeyTable, primaryKeyColumn, primaryKeyConstraintName}) {
     return (
         <div className="table">
-            <div className="relation-connection">{connectionName}</div>
-            <div className="relation-child-table">{childTable}</div>
-            <div className="relation-child-column">{childColumn}</div>
-            <div className="relation-parent-table">{parentTable}</div>
-            <div className="relation-parent-column">{parentColumn}</div>
+            <div className="relation-child-table">{foreignKeyTable}</div>
+            <div className="relation-child-column">{foreignKeyColumn}</div>
+            <div className="relation-connection">{foreignKeyConstraintName}</div>
+            <div className="relation-parent-table">{primaryKeyTable}</div>
+            <div className="relation-parent-column">{primaryKeyColumn}</div>
+            <div className="relation-connection">{primaryKeyConstraintName}</div>
         </div>
     );
 }

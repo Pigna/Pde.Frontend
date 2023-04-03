@@ -37,6 +37,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "^5.0.1",
+    "react-uuid": "^2.0.0",
     "runtime-env-cra": "^0.2.4",
     "sass": "^1.59.3",
     "stylelint": "^15.3.0",

@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import Table from "../../models/Table";
 import Relation from "../../models/Relation";
+import uuid from "react-uuid";
 
 function FetchTablesAndRelations() {
     const [username, setUsername] = useState("postgres");
@@ -16,7 +17,7 @@ function FetchTablesAndRelations() {
     let handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            let res = await fetch("http://localhost:5287/Database", {
+            let response = await fetch("http://localhost:5287/Database", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json, text/plain',
@@ -30,8 +31,8 @@ function FetchTablesAndRelations() {
                     database: database,
                 }),
             });
-            let resJson = await res.json();
-            if (res.status === 200 && resJson.result === 0) {
+            let resJson = await response.json();
+            if (response.status === 200 && resJson.result === 0) {
                 // setUsername("");
                 // setPassword("");
                 // setHost("");
@@ -45,12 +46,42 @@ function FetchTablesAndRelations() {
                 setMessage("Some error occurred. " + resJson.result);
             }
         } catch (err) {
-            console.log("Backend connection error:" + err);
+            setMessage("Backend connection error:" + err);
         }
     };
 
+    let handleExport = async (e) => {
+        e.preventDefault();
+        console.log(e)
+        try {
+            let response = await fetch("http://localhost:5287/Export", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({
+                database: {
+                    username: username,
+                    password: password,
+                    host: host,
+                    port: port,
+                    database: database,
+                },
+                form: e.target}),
+            });
+            let resJson = await response.json();
+            if (response.status === 200 && resJson.result === 0) {
+                setMessage("Export request successful." + resJson.result);
+            } else {
+                setMessage("Some error with Export request." + resJson.result);
+            }
+        } catch (err) {
+            setMessage("Backend connection error:" + err);
+        }
+    }
     function getRelationsForTable(tableName) {
-        return relations.filter(item => item.parentTable === tableName || item.childTable === tableName);
+        return relations.filter(item => item.primaryKeyTable === tableName || item.foreignKeyTable === tableName);
     }
 
     return (
@@ -86,22 +117,28 @@ function FetchTablesAndRelations() {
                     placeholder="Database"
                     onChange={(e) => setDatabase(e.target.value)}
                 />
-                <button type="submit">Create</button>
+                <button type="submit">Submit</button>
             </form>
             <div className="message">{message ? <p>{message}</p> : null}</div>
-            {tables.map((item => {
-                    return <Table key={item.name}
-                                  id={item.name}
-                                  columns={item.columns}
-                                  relations={getRelationsForTable(item.name)}/>;
-                }
-            ))}
-            {relations.map((item => <Relation key={item.connectionName}
-                                              childTable={item.childTable}
-                                              childColumn={item.childColumn}
-                                              parentTable={item.parentTable}
-                                              parentColumn={item.parentColumn}
-                                              connectionName={item.connectionName}
+
+            <form onSubmit={handleExport}>
+                {tables.map((item => {
+                        return <Table key={item.name}
+                                      tableName={item.name}
+                                      columns={item.columns}
+                                      relations={getRelationsForTable(item.name)}/>;
+                    }
+                ))}
+                <button type="submit">Export</button>
+            </form>
+            {
+                relations.map((item => <Relation key={uuid()}
+                                              foreignKeyTable={item.foreignKeyTable}
+                                              foreignKeyColumn={item.foreignKeyColumn}
+                                              foreignKeyConstraintName={item.foreignKeyConstraintName}
+                                              primaryKeyTable={item.primaryKeyTable}
+                                              primaryKeyColumn={item.primaryKeyColumn}
+                                              primaryKeyConstraintName={item.primaryKeyConstraintName}
             />))}
         </div>
     );
