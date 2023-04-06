@@ -60,12 +60,11 @@ function FetchTablesAndRelations()
 
 	let handleExport = async (e) =>
 	{
-		e.preventDefault();
-
 		let mappedData = mapFormData(e.target);
-
+		e.preventDefault();
 		try
 		{
+
 			let response = await fetch("http://localhost:5287/Export", {
 				method: "POST",
 				headers: {
@@ -105,16 +104,13 @@ function FetchTablesAndRelations()
 
 		for (let item of formData)
 		{
-			if (item.value)
-			{
-				//TODO: Splitting on . might give issues if a table has a . in the name
-				let splitName = item.name.split('.', 2)
-				data.push({
-					table: splitName[0],
-					column: splitName[1],
-					value: item.value
-				})
-			}
+			//TODO: Splitting on . might give issues if a table has a . in the name
+			let splitName = item.name.split('.', 2)
+			data.push({
+				table: splitName[0],
+				column: splitName[1],
+				value: item.value
+			})
 		}
 
 		return data;
