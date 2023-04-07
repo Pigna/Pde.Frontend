@@ -72,14 +72,14 @@ function FetchTablesAndRelations()
 					'Content-Type': 'application/json;charset=UTF-8'
 				},
 				body: JSON.stringify({
-					database: {
+					DatabaseConnectionInfo: {
 						username: username,
 						password: password,
 						host: host,
 						port: port,
 						database: database,
 					},
-					form: mappedData
+					ExportDataViewModels: mappedData
 				}),
 			});
 			let resJson = await response.json();
@@ -107,9 +107,9 @@ function FetchTablesAndRelations()
 			//TODO: Splitting on . might give issues if a table has a . in the name
 			let splitName = item.name.split('.', 2)
 			data.push({
-				table: splitName[0],
-				column: splitName[1],
-				value: item.value
+				TableName: splitName[0],
+				ColumnName: splitName[1],
+				DataType: Number(item.value)
 			})
 		}
 
