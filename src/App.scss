@@ -65,3 +65,30 @@
 .icon-check {
   
 }
+#db-login {
+  margin: 0 auto;
+  width: 400px;
+  border: 1px var(--turquois) solid;
+  border-radius: 5px;
+  padding: 10px;
+}
+.form-group {
+
+}
+.form-group label {
+  display: inline-block;
+  width: 50%;
+  text-align: right;
+}
+
+.form-group label:after{
+  content: ": ";
+}
+
+#db-login .message {
+  margin-top: 5px;
+  padding: 5px;
+  background: #ffc7c7;
+  border-left: 9px solid #ff5959;
+  color: #243241;
+}

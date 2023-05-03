@@ -10,6 +10,7 @@ function FetchTablesAndRelations()
 	const [host, setHost] = useState("localhost");
 	const [port, setPort] = useState("32768");
 	const [database, setDatabase] = useState("postgres");
+	const [connected, setConnected] = useState(false);
 
 	const [message, setMessage] = useState("");
 
@@ -45,6 +46,7 @@ function FetchTablesAndRelations()
 				setTables(resJson.databaseInfo.tables);
 				setRelations(resJson.databaseInfo.relations);
 				setMessage("Login Successfully. " + resJson.result);
+				setConnected(true);
 			}
 			else
 			{
@@ -61,6 +63,7 @@ function FetchTablesAndRelations()
 	let handleExport = async (e) =>
 	{
 		let mappedData = mapFormData(e.target);
+		console.log(e.target)
 		e.preventDefault();
 		try
 		{
@@ -105,12 +108,15 @@ function FetchTablesAndRelations()
 		for (let item of formData)
 		{
 			//TODO: Splitting on . might give issues if a table has a . in the name
-			let splitName = item.name.split('.', 2)
-			data.push({
-				TableName: splitName[0],
-				ColumnName: splitName[1],
-				DataType: Number(item.value)
-			})
+			if (item.name)
+			{
+				let splitName = item.name.split('.', 2)
+				data.push({
+					TableName: splitName[0],
+					ColumnName: splitName[1],
+					DataType: Number(item.value)
+				})
+			}
 		}
 
 		return data;
@@ -121,57 +127,107 @@ function FetchTablesAndRelations()
 		return relations.filter(item => item.primaryKeyTable === tableName || item.foreignKeyTable === tableName);
 	}
 
-	return (
-		<div className="fetch-tables">
+	function loginForm()
+	{
+		return <div id="db-login">
 			<form onSubmit={handleSubmit}>
-				<input
-					type="text"
-					value={username}
-					placeholder="Username"
-					onChange={(e) => setUsername(e.target.value)}
-				/>
-				<input
-					type="text"
-					value={password}
-					placeholder="Password"
-					onChange={(e) => setPassword(e.target.value)}
-				/>
-				<input
-					type="text"
-					value={host}
-					placeholder="Host"
-					onChange={(e) => setHost(e.target.value)}
-				/>
-				<input
-					type="text"
-					value={port}
-					placeholder="Port"
-					onChange={(e) => setPort(e.target.value)}
-				/>
-				<input
-					type="text"
-					value={database}
-					placeholder="Database"
-					onChange={(e) => setDatabase(e.target.value)}
-				/>
+				<div class="form-group">
+					<label htmlFor="username">Username</label>
+					<input
+						id="username"
+						name="username"
+						type="text"
+						value={username}
+						placeholder="admin"
+						onChange={(e) => setUsername(e.target.value)}
+						required
+					/>
+				</div>
+				<div className="form-group">
+					<label htmlFor="password">Password</label>
+					<input
+						id="password"
+						name="password"
+						type="text"
+						value={password}
+						placeholder="Secret123"
+						onChange={(e) => setPassword(e.target.value)}
+						required
+					/>
+				</div>
+				<div className="form-group">
+					<label htmlFor="host">Host</label>
+					<input
+						id="host"
+						name="host"
+						type="text"
+						value={host}
+						placeholder="localhost"
+						onChange={(e) => setHost(e.target.value)}
+						required
+					/>
+				</div>
+				<div className="form-group">
+					<label htmlFor="port">Port</label>
+					<input
+						id="port"
+						name="port"
+						type="text"
+						value={port}
+						placeholder="3000"
+						onChange={(e) => setPort(e.target.value)}
+						required
+					/>
+				</div>
+				<div className="form-group">
+					<label htmlFor="database">Database</label>
+					<input
+						id="database"
+						name="database"
+						type="text"
+						value={database}
+						placeholder="db"
+						onChange={(e) => setDatabase(e.target.value)}
+						required
+					/>
+				</div>
 				<button type="submit">Submit</button>
 			</form>
-			<div className="message">{message
-									  ? <p>{message}</p>
-									  : null}</div>
+			{
+				message
+				? <div className="message">
+					<p>{message}</p>
+				  </div>
+				: null
+			}
 
-			<form onSubmit={handleExport}>
-				{tables.map((item =>
-					{
-						return <Table key={item.name}
-									  tableName={item.name}
-									  columns={item.columns}
-									  relations={getRelationsForTable(item.name)}
-						/>;
-					}
-				))}
-				<button type="submit">Export</button>
-			</form>
+		</div>
+	}
+
+	function exportForm()
+	{
+		return <form onSubmit={handleExport}>
+			{tables.map((item =>
+				{
+					return <Table key={item.name}
+								  tableName={item.name}
+								  columns={item.columns}
+								  relations={getRelationsForTable(item.name)}
+					/>;
+				}
+			))}
+			<button type="submit">Export</button>
+		</form>
+	}
+
+	return (
+		<div className="fetch-tables">
+			{!connected
+			 ? loginForm()
+			 : null}
+			{connected
+			 ? exportForm()
+			 : null}
 			{
 				relations.map((item => <Relation key={uuid()}
 												 foreignKeyTable={item.foreignKeyTable}
@@ -180,7 +236,8 @@ function FetchTablesAndRelations()
 												 primaryKeyTable={item.primaryKeyTable}
 												 primaryKeyColumn={item.primaryKeyColumn}
 												 primaryKeyConstraintName={item.primaryKeyConstraintName}
-				/>))}
+				/>))
+			}
 		</div>
 	);
 }

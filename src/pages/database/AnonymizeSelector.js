@@ -5,7 +5,7 @@ function AnonymizeSelector({table, column, type})
 {
 	const types = [
 		{id: 1, name: "Account", type: "character varying"},
-		{id: 2, name: "Amount", type: "integer"},
+		{id: 2, name: "Number", type: "integer"},
 		{id: 3, name: "Amount", type: "numeric"},
 		{id: 4, name: "Avatar", type: "character varying"},
 		{id: 5, name: "BuildingNumber", type: "character varying"},
@@ -23,7 +23,7 @@ function AnonymizeSelector({table, column, type})
 		{id: 17, name: "Latitude", type: "character varying"},
 		{id: 18, name: "Longitude", type: "character varying"},
 		{id: 19, name: "Month", type: "integer"},
-		{id: 20, name: "Month", type: "numeric"},
+		{id: 20, name: "Month Number", type: "numeric"},
 		{id: 21, name: "Password", type: "character varying"},
 		{id: 22, name: "PhoneNumber", type: "character varying"},
 		{id: 23, name: "Picture", type: "character varying"},
