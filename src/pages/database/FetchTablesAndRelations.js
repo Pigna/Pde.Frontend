@@ -45,7 +45,6 @@ function FetchTablesAndRelations()
 				// setDatabase("");
 				setTables(resJson.databaseInfo.tables);
 				setRelations(resJson.databaseInfo.relations);
-				setMessage("Login Successfully. " + resJson.result);
 				setConnected(true);
 			}
 			else
@@ -101,6 +100,12 @@ function FetchTablesAndRelations()
 		}
 	}
 
+	function handleDisconnect()
+	{
+		setMessage("");
+		setConnected(false);
+	}
+
 	function mapFormData(formData)
 	{
 		let data = [];
@@ -131,7 +136,7 @@ function FetchTablesAndRelations()
 	{
 		return <div id="db-login">
 			<form onSubmit={handleSubmit}>
-				<div class="form-group">
+				<div className="form-group">
 					<label htmlFor="username">Username</label>
 					<input
 						id="username"
@@ -148,7 +153,7 @@ function FetchTablesAndRelations()
 					<input
 						id="password"
 						name="password"
-						type="text"
+						type="password"
 						value={password}
 						placeholder="Secret123"
 						onChange={(e) => setPassword(e.target.value)}
@@ -204,6 +209,11 @@ function FetchTablesAndRelations()
 		</div>
 	}
 
+	function disconnect()
+	{
+		return <button onClick={handleDisconnect}>Disconnect</button>
+	}
+
 	function exportForm()
 	{
 		return <form onSubmit={handleExport}>
@@ -224,7 +234,7 @@ function FetchTablesAndRelations()
 		<div className="fetch-tables">
 			{!connected
 			 ? loginForm()
-			 : null}
+			 : disconnect()}
 			{connected
 			 ? exportForm()
 			 : null}
