@@ -31,7 +31,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "jest-watch-typeahead": "^2.2.2",
     "npm-cli": "^0.1.0",
-    "pre-push": "^0.1.4",
     "prettier": "^2.8.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
