@@ -81,7 +81,8 @@ function FetchTablesAndRelations()
 						port: port,
 						database: database,
 					},
-					ExportDataViewModels: mappedData
+					ExportDataViewModels: mappedData,
+					TableRelationsViewModel: relations
 				}),
 			});
 			let resJson = await response.json();
